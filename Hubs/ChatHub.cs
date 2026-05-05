@@ -164,10 +164,12 @@ public class ChatHub : Hub
         if (!_chatStateService.CanUserAccessRoom(username, room))
             room = "General";
 
+        string? prevRoom = null;
         if (Context.Items.TryGetValue(RoomKey, out var prev) &&
-            prev is string prevRoom &&
-            !string.Equals(prevRoom, room, StringComparison.OrdinalIgnoreCase))
+            prev is string pr &&
+            !string.Equals(pr, room, StringComparison.OrdinalIgnoreCase))
         {
+            prevRoom = pr;
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, prevRoom);
         }
 
@@ -191,7 +193,11 @@ public class ChatHub : Hub
             usersOnline = _chatStateService.GetOnlineUserCount(room)
         });
 
+        // Broadcast presence to new room AND old room so members in both
+        // rooms see accurate online status immediately after a room switch.
         await BroadcastPresenceAsync(room);
+        if (!string.IsNullOrEmpty(prevRoom))
+            await BroadcastPresenceAsync(prevRoom);
 
         // Push the full room history to the joining client so they see all
         // messages that arrived via RabbitMQ before they connected, including
@@ -230,6 +236,12 @@ public class ChatHub : Hub
         room = string.IsNullOrWhiteSpace(room) ? "General" : room.Trim();
 
         _chatStateService.UpdateLastSeen(username, DateTime.UtcNow);
+
+        // Use server-tracked current room in case client param is stale after reconnect
+        string trackedRoom;
+        lock (_registryLock) { _currentRooms.TryGetValue(username, out trackedRoom!); }
+        if (!string.IsNullOrEmpty(trackedRoom))
+            room = trackedRoom;
 
         await BroadcastPresenceAsync(room);
 
@@ -286,16 +298,15 @@ public class ChatHub : Hub
         room = room.Trim();
         username = username.Trim();
 
-        bool changed;
         lock (_typingLock)
         {
-            if (!_typingUsers.TryGetValue(room, out var set))
-                return;
-            changed = set.Remove(username);
+            if (_typingUsers.TryGetValue(room, out var set))
+                set.Remove(username);
         }
 
-        if (changed)
-            await BroadcastTypingAsync(room, username);
+        // Always broadcast so clients clear the typing indicator even if the
+        // user wasn't in the set (e.g. after a reconnect or rapid send).
+        await BroadcastTypingAsync(room, username);
     }
 
     private async Task BroadcastTypingAsync(string room, string triggeringUser)
@@ -558,11 +569,10 @@ public class ChatHub : Hub
             lock (_registryLock) { _displayNames.TryGetValue(m, out dn!); }
             if (string.IsNullOrWhiteSpace(dn)) dn = m; // safe fallback
 
-            // Only mark as online if the user is actually online AND currently in this room
-            string userCurrentRoom;
-            lock (_registryLock) { _currentRooms.TryGetValue(m, out userCurrentRoom!); }
-            var isOnline = _chatStateService.IsUserOnline(m) &&
-                           string.Equals(userCurrentRoom, room, StringComparison.OrdinalIgnoreCase);
+            // Mark as online if the user is actually online (heartbeat within threshold)
+            // regardless of which room they're currently viewing — the member panel
+            // shows all room members with their live online status.
+            var isOnline = _chatStateService.IsUserOnline(m);
 
             memberList.Add(new
             {
