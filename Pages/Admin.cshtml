@@ -550,6 +550,7 @@
 </style>
 
 <script>
+    // Auto-refresh every 30 seconds to update online status
     setTimeout(function() { window.location.reload(); }, 30000);
     var seconds = 30;
     var note = document.getElementById('refresh-countdown');
@@ -557,4 +558,11 @@
         seconds--;
         if (note) note.textContent = 'Auto-refreshing in ' + seconds + 's';
     }, 1000);
+
+    // Ping the server every 15 seconds to keep admin marked as online
+    setInterval(function() {
+        fetch('/Admin?handler=Heartbeat', { method: 'POST',
+            headers: { 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || '' }
+        }).catch(function(){});
+    }, 15000);
 </script>

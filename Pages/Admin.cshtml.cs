@@ -82,6 +82,9 @@ public class AdminModel : PageModel
         var guard = await RequireAdmin();
         if (guard != null) return guard;
 
+        // Keep admin marked as online while they're on this page
+        _chatStateService.UpdateLastSeen(AdminUsername, DateTime.UtcNow);
+
         StatusMessage = msg;
         await PopulateViewModel();
         return Page();
@@ -150,6 +153,14 @@ public class AdminModel : PageModel
             return RedirectToPage(new { msg = status });
         }
         return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostHeartbeatAsync()
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (!string.IsNullOrWhiteSpace(username))
+            _chatStateService.UpdateLastSeen(username, DateTime.UtcNow);
+        return new OkResult();
     }
 
     public IActionResult OnPostLogout()
