@@ -40,6 +40,8 @@
 
         <div class="admin-topbar">
             <h1 class="admin-page-title">Dashboard</h1>
+            <button onclick="window.location.reload()" class="admin-refresh-btn">↻ Refresh</button>
+            <span id="refresh-countdown" class="admin-refresh-note">Auto-refreshing in 30s</span>
             @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
             {
             <div class="admin-status-banner">✅ @Model.StatusMessage</div>
@@ -531,4 +533,28 @@
     color: #fff;
     flex-shrink: 0;
 }
+
+.admin-refresh-btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: rgba(108,138,255,0.12);
+    border: 1px solid rgba(108,138,255,0.3);
+    color: #6c8aff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+}
+.admin-refresh-btn:hover { background: rgba(108,138,255,0.22); }
+.admin-refresh-note { font-size: 11px; color: #474d5a; }
 </style>
+
+<script>
+    setTimeout(function() { window.location.reload(); }, 30000);
+    var seconds = 30;
+    var note = document.getElementById('refresh-countdown');
+    setInterval(function() {
+        seconds--;
+        if (note) note.textContent = 'Auto-refreshing in ' + seconds + 's';
+    }, 1000);
+</script>
