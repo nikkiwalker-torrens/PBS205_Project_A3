@@ -1,0 +1,17 @@
+services:
+  chatclient-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chatclient-web
+    ports:
+      - "5050:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      RabbitMq__HostName: 134.199.175.224
+      RabbitMq__Port: 5672
+      RabbitMq__UserName: PBT205
+      RabbitMq__Password: PBT205Torrens
+      RabbitMq__ExchangeName: chat.exchange
+      ConnectionStrings__ChatDb: Host=134.199.175.224;Port=5432;Database=chatdb;Username=PBT205;Password=PBT205Torrens

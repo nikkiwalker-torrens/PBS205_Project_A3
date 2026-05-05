@@ -1,0 +1,534 @@
+@page
+@model AdminModel
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+        <div class="admin-brand">
+            <span class="admin-brand-icon">🛡️</span>
+            <span class="admin-brand-name">Admin Panel</span>
+        </div>
+
+        <nav class="admin-nav">
+            <a href="#section-rooms" class="admin-nav-item active">🏠 Rooms</a>
+            <a href="#section-users" class="admin-nav-item">👥 Users</a>
+        </nav>
+
+        <div class="admin-sidebar-footer">
+            <div class="admin-user-row">
+                <div class="admin-avatar">@Model.AdminUsername.Substring(0,1).ToUpper()</div>
+                <div>
+                    <div class="admin-user-name">@Model.AdminUsername</div>
+                    <div class="admin-user-role">Administrator</div>
+                </div>
+            </div>
+            <div class="admin-footer-actions">
+                <a href="/Rooms" class="admin-link-btn">← Back to Chat</a>
+                <form method="post" asp-page-handler="Logout" style="display:inline">
+                    <button type="submit" class="admin-logout-btn">Sign out</button>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+
+        <div class="admin-topbar">
+            <h1 class="admin-page-title">Dashboard</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+            {
+            <div class="admin-status-banner">✅ @Model.StatusMessage</div>
+            }
+        </div>
+
+        <!-- STATS ROW -->
+        <div class="admin-stats-row">
+            <div class="admin-stat-card">
+                <div class="admin-stat-value">@Model.AllRooms.Count</div>
+                <div class="admin-stat-label">Total Rooms</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-value">@Model.AllUsers.Count</div>
+                <div class="admin-stat-label">Registered Users</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-value" style="color:#4dff89">@Model.AllUsers.Count(u => u.IsOnline)</div>
+                <div class="admin-stat-label">Users Online</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-value">@Model.AllRooms.Sum(r => r.MessageCount)</div>
+                <div class="admin-stat-label">Total Messages</div>
+            </div>
+        </div>
+
+        <!-- ROOMS SECTION -->
+        <section class="admin-section" id="section-rooms">
+            <div class="admin-section-header">
+                <h2 class="admin-section-title">🏠 Rooms</h2>
+                <span class="admin-section-count">@Model.AllRooms.Count rooms</span>
+            </div>
+
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Messages</th>
+                            <th>Online</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var room in Model.AllRooms)
+                        {
+                        <tr>
+                            <td>
+                                <span class="room-icon">@(room.Name.StartsWith("dm::") ? "💬" : room.IsSystem ? "🏠" : "#")</span>
+                                <span class="room-name-cell">@room.Name</span>
+                                @if (room.IsSystem)
+                                {
+                                <span class="admin-badge system">system</span>
+                                }
+                            </td>
+                            <td>
+                                @if (room.IsPrivate)
+                                {
+                                <span class="admin-badge private">Private</span>
+                                }
+                                else
+                                {
+                                <span class="admin-badge public">Public</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="admin-count">@room.MessageCount</span>
+                            </td>
+                            <td>
+                                <span class="@(room.OnlineUsers > 0 ? "admin-online-count" : "admin-count")">@room.OnlineUsers</span>
+                            </td>
+                            <td class="admin-actions-cell">
+                                <!-- Clear messages — available for ALL rooms including system rooms -->
+                                <form method="post" asp-page-handler="ClearMessages" class="inline-form"
+                                      onsubmit="return confirm('Clear all messages in @room.Name?')">
+                                    <input type="hidden" name="roomName" value="@room.Name" />
+                                    <button type="submit" class="admin-action-btn warn" title="Clear messages">🧹 Clear</button>
+                                </form>
+                                @if (!room.IsSystem)
+                                {
+                                <!-- Delete room — non-system rooms only -->
+                                <form method="post" asp-page-handler="DeleteRoom" class="inline-form"
+                                      onsubmit="return confirm('Permanently delete room @room.Name and all its messages?')">
+                                    <input type="hidden" name="roomName" value="@room.Name" />
+                                    <button type="submit" class="admin-action-btn danger" title="Delete room">🗑 Delete</button>
+                                </form>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- USERS SECTION -->
+        <section class="admin-section" id="section-users">
+            <div class="admin-section-header">
+                <h2 class="admin-section-title">👥 Registered Users</h2>
+                <span class="admin-section-count">@Model.AllUsers.Count accounts</span>
+            </div>
+
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Display Name</th>
+                            <th>Registered</th>
+                            <th>Status</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.AllUsers)
+                        {
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar-sm">@user.Username.Substring(0,1).ToUpper()</div>
+                                    <span>@user.Username</span>
+                                </div>
+                            </td>
+                            <td>@user.DisplayName</td>
+                            <td class="admin-date">@user.CreatedAt.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                @if (user.IsOnline)
+                                {
+                                <span class="admin-badge online">● Online</span>
+                                }
+                                else
+                                {
+                                <span class="admin-badge offline">○ Offline</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.IsAdmin)
+                                {
+                                <span class="admin-badge admin-role">🛡 Admin</span>
+                                }
+                                else
+                                {
+                                <span class="admin-badge user-role">User</span>
+                                }
+                            </td>
+                            <td class="admin-actions-cell">
+                                @if (!user.IsAdmin)
+                                {
+                                <form method="post" asp-page-handler="DeleteUser" class="inline-form"
+                                      onsubmit="return confirm('Permanently delete user @user.Username? They will not be able to log in.')">
+                                    <input type="hidden" name="username" value="@user.Username" />
+                                    <button type="submit" class="admin-action-btn danger">🗑 Delete</button>
+                                </form>
+                                }
+                                else
+                                {
+                                <span class="admin-protected">Protected</span>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<style>
+/* ============================================================
+   ADMIN PANEL — dark theme matching the chat app
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #13151c;
+    color: #e4e9f4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+}
+
+/* ── SIDEBAR ── */
+.admin-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #1a1d27;
+    border-right: 1px solid #2a2d3a;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 16px;
+    border-bottom: 1px solid #2a2d3a;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.admin-brand-icon { font-size: 20px; }
+
+.admin-nav {
+    flex: 1;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.admin-nav-item {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: #8a93a8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background .15s, color .15s;
+}
+
+.admin-nav-item:hover, .admin-nav-item.active {
+    background: #252836;
+    color: #e4e9f4;
+}
+
+.admin-sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid #2a2d3a;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-user-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5b66f6, #ae61d2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.admin-user-name { font-weight: 600; font-size: 13px; }
+.admin-user-role { font-size: 11px; color: #ae61d2; margin-top: 1px; }
+
+.admin-footer-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.admin-link-btn {
+    font-size: 12px;
+    color: #6c8aff;
+    text-decoration: none;
+}
+.admin-link-btn:hover { text-decoration: underline; }
+
+.admin-logout-btn {
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #474d5a;
+    border-radius: 6px;
+    color: #ff7474;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: background .15s;
+}
+.admin-logout-btn:hover { background: rgba(232,64,64,0.15); }
+
+/* ── MAIN ── */
+.admin-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.admin-page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.admin-status-banner {
+    background: rgba(77,255,137,0.12);
+    border: 1px solid rgba(77,255,137,0.3);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #4dff89;
+    font-size: 13px;
+}
+
+/* ── STATS ── */
+.admin-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 14px;
+}
+
+.admin-stat-card {
+    background: #1e2129;
+    border: 1px solid #2a2d3a;
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+}
+
+.admin-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #6c8aff;
+    line-height: 1;
+}
+
+.admin-stat-label {
+    font-size: 12px;
+    color: #8a93a8;
+    margin-top: 6px;
+}
+
+/* ── SECTIONS ── */
+.admin-section {
+    background: #1e2129;
+    border: 1px solid #2a2d3a;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.admin-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #2a2d3a;
+    background: #1a1d27;
+}
+
+.admin-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.admin-section-count {
+    font-size: 12px;
+    color: #8a93a8;
+    margin-left: auto;
+}
+
+/* ── TABLE ── */
+.admin-table-wrap { overflow-x: auto; }
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table thead tr {
+    background: #191c25;
+}
+
+.admin-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #8a93a8;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    border-bottom: 1px solid #2a2d3a;
+}
+
+.admin-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #22252f;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:last-child td { border-bottom: none; }
+
+.admin-table tbody tr:hover { background: #22252f; }
+
+/* ── BADGES ── */
+.admin-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.admin-badge.system   { background: rgba(108,138,255,0.15); color: #6c8aff; }
+.admin-badge.private  { background: rgba(174,97,210,0.15);  color: #ae61d2; }
+.admin-badge.public   { background: rgba(77,255,137,0.10);  color: #4dff89; }
+.admin-badge.online   { background: rgba(77,255,137,0.10);  color: #4dff89; }
+.admin-badge.offline  { background: rgba(138,147,168,0.10); color: #8a93a8; }
+.admin-badge.admin-role { background: rgba(174,97,210,0.15); color: #ae61d2; }
+.admin-badge.user-role  { background: rgba(138,147,168,0.10); color: #8a93a8; }
+
+/* ── ACTION BUTTONS ── */
+.inline-form { display: inline; }
+
+.admin-actions-cell { white-space: nowrap; }
+
+.admin-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background .15s, border-color .15s;
+    margin-right: 4px;
+}
+
+.admin-action-btn.danger {
+    background: rgba(232,64,64,0.10);
+    border-color: rgba(232,64,64,0.25);
+    color: #ff7474;
+}
+.admin-action-btn.danger:hover {
+    background: rgba(232,64,64,0.20);
+    border-color: #e84040;
+}
+
+.admin-action-btn.warn {
+    background: rgba(255,180,50,0.10);
+    border-color: rgba(255,180,50,0.25);
+    color: #ffb432;
+}
+.admin-action-btn.warn:hover {
+    background: rgba(255,180,50,0.20);
+    border-color: #ffb432;
+}
+
+.admin-protected {
+    font-size: 12px;
+    color: #474d5a;
+    font-style: italic;
+}
+
+.admin-count { color: #8a93a8; }
+.admin-online-count { color: #4dff89; font-weight: 600; }
+.admin-date { color: #8a93a8; font-size: 12px; font-family: monospace; }
+
+.room-icon { margin-right: 6px; }
+.room-name-cell { font-weight: 500; }
+
+.user-cell { display: flex; align-items: center; gap: 8px; }
+
+.user-avatar-sm {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5b66f6, #ae61d2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+</style>

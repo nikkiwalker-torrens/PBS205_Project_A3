@@ -1,0 +1,241 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\pages\\chat.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:pages\\chat.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\models\\chatexportdocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:models\\chatexportdocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\pages\\chat.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:pages\\chat.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\chatclient.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:chatclient.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\pages\\rooms.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:pages\\rooms.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\hubs\\chathub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:hubs\\chathub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\services\\chatstateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:services\\chatstateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\services\\ichatstateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:services\\ichatstateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\services\\rabbitmqchatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:services\\rabbitmqchatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\models\\userpresence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:models\\userpresence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|c:\\users\\stephen\\documents\\uni stuff\\pbt205\\assignment 1\\chatprogram\\chatclient.web\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6DED217E-2E0A-471A-AF97-5295537BA5CD}|ChatClient.Web.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ChatExportDocument.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Models\\ChatExportDocument.cs",
+              "RelativeDocumentMoniker": "Models\\ChatExportDocument.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Models\\ChatExportDocument.cs",
+              "RelativeToolTip": "Models\\ChatExportDocument.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAgwIEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T11:35:30.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T11:32:17.281Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ChatClient.Web",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\ChatClient.Web.csproj",
+              "RelativeDocumentMoniker": "ChatClient.Web.csproj",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\ChatClient.Web.csproj",
+              "RelativeToolTip": "ChatClient.Web.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-15T11:31:38.23Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Chat.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Pages\\Chat.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Chat.cshtml.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Pages\\Chat.cshtml.cs",
+              "RelativeToolTip": "Pages\\Chat.cshtml.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAgwE8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T21:26:18.23Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Chat.cshtml",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Pages\\Chat.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Chat.cshtml",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Pages\\Chat.cshtml",
+              "RelativeToolTip": "Pages\\Chat.cshtml",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAAwB0BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-14T06:46:41.047Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAK0CAAAAAAAAAAAmwMwCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-03-14T21:29:47.045Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Rooms.cshtml",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Pages\\Rooms.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Rooms.cshtml",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Pages\\Rooms.cshtml",
+              "RelativeToolTip": "Pages\\Rooms.cshtml",
+              "ViewState": "AgIAACIAAAAAAAAAAAAYwEAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-15T11:30:08.511Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ChatHub.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Hubs\\ChatHub.cs",
+              "RelativeDocumentMoniker": "Hubs\\ChatHub.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Hubs\\ChatHub.cs",
+              "RelativeToolTip": "Hubs\\ChatHub.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAFIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T10:48:10.662Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RabbitMqChatService.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Services\\RabbitMqChatService.cs",
+              "RelativeDocumentMoniker": "Services\\RabbitMqChatService.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Services\\RabbitMqChatService.cs",
+              "RelativeToolTip": "Services\\RabbitMqChatService.cs",
+              "ViewState": "AgIAAKYAAAAAAAAAAAAgwMMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T10:54:25.274Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IChatStateService.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Services\\IChatStateService.cs",
+              "RelativeDocumentMoniker": "Services\\IChatStateService.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Services\\IChatStateService.cs",
+              "RelativeToolTip": "Services\\IChatStateService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T10:44:07.039Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ChatStateService.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Services\\ChatStateService.cs",
+              "RelativeDocumentMoniker": "Services\\ChatStateService.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Services\\ChatStateService.cs",
+              "RelativeToolTip": "Services\\ChatStateService.cs",
+              "ViewState": "AgIAAHQBAAAAAAAAAAAowIgBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-14T06:53:07.123Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserPresence.cs",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Models\\UserPresence.cs",
+              "RelativeDocumentMoniker": "Models\\UserPresence.cs",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Models\\UserPresence.cs",
+              "RelativeToolTip": "Models\\UserPresence.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T10:46:21.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assignment 1\\ChatProgram\\ChatClient.Web\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-14T07:00:19.245Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

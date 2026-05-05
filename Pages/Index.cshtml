@@ -1,0 +1,284 @@
+@page
+@model ChatClient.Web.Pages.IndexModel
+@{
+    ViewData["Title"] = "Welcome";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Client – Sign In</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        .auth-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1d24;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 11px 0;
+            border: none;
+            background: transparent;
+            color: #9aa3b5;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s, color .15s;
+        }
+        .auth-tab.active {
+            background: linear-gradient(135deg, #5b66f6, #6f5cff);
+            color: #fff;
+            border-radius: 12px;
+        }
+        .auth-tab:hover:not(.active) { color: #fff; }
+
+        /* Panel: column of field-groups */
+        .auth-panel { display: none; flex-direction: column; gap: 12px; }
+        .auth-panel.active { display: flex; }
+
+        /* Each field + hint wrapped together */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* NO negative margin on hints */
+        .field-hint {
+            font-size: 11px;
+            color: #8a93a8;
+            padding-left: 4px;
+            line-height: 1.3;
+            min-height: 14px;
+        }
+
+        /* Error lives inside each form */
+        .error-banner {
+            background: rgba(232, 64, 64, 0.15);
+            border: 1px solid rgba(232, 64, 64, 0.4);
+            color: #ff7474;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+
+        .input-wrap { position: relative; }
+        .input-wrap input[type="password"],
+        .input-wrap input[type="text"] { padding-right: 42px; }
+        .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6e79ff;
+            font-size: 15px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .pw-strength {
+            height: 4px;
+            border-radius: 4px;
+            background: #1a1d24;
+            overflow: hidden;
+        }
+        .pw-strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width .3s, background .3s;
+        }
+    </style>
+</head>
+<body class="app-body">
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-title">&#x1F4AC; Chat Client</div>
+        <div class="login-subtitle">Connect and collaborate in real time</div>
+
+        <div class="auth-tabs" role="tablist">
+            <button type="button" class="auth-tab @(Model.ActiveTab == "login"    ? "active" : "")"
+                    id="tab-login"    onclick="switchTab('login')"    role="tab">Sign In</button>
+            <button type="button" class="auth-tab @(Model.ActiveTab == "register" ? "active" : "")"
+                    id="tab-register" onclick="switchTab('register')" role="tab">Register</button>
+        </div>
+
+        @* LOGIN PANEL — error banner sits inside the form *@
+        <form method="post" asp-page-handler="Login" id="form-login"
+              class="auth-panel @(Model.ActiveTab == "login" ? "active" : "")" novalidate>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage) && Model.ActiveTab == "login")
+            {
+            <div class="error-banner">@Model.ErrorMessage</div>
+            }
+
+            <div class="field-group">
+                <input asp-for="LoginUsername"
+                       class="room-input"
+                       placeholder="Username"
+                       autocomplete="username"
+                       maxlength="32"
+                       required />
+            </div>
+
+            <div class="field-group">
+                <div class="input-wrap">
+                    <input asp-for="LoginPassword"
+                           type="password"
+                           class="room-input"
+                           placeholder="Password"
+                           autocomplete="current-password"
+                           id="login-pw"
+                           required />
+                    <button type="button" class="toggle-pw" onclick="togglePw('login-pw',this)" title="Show/hide">&#x1F441;</button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">Sign In</button>
+        </form>
+
+        @* REGISTER PANEL — error banner sits inside the form *@
+        <form method="post" asp-page-handler="Register" id="form-register"
+              class="auth-panel @(Model.ActiveTab == "register" ? "active" : "")" novalidate>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage) && Model.ActiveTab == "register")
+            {
+            <div class="error-banner">@Model.ErrorMessage</div>
+            }
+
+            <div class="field-group">
+                <input asp-for="RegUsername"
+                       class="room-input"
+                       placeholder="Username"
+                       autocomplete="username"
+                       id="reg-username"
+                       maxlength="32"
+                       oninput="validateRegUsername(this)"
+                       required />
+                <div class="field-hint" id="reg-username-hint">Used to log in &mdash; not visible in chat</div>
+            </div>
+
+            <div class="field-group">
+                <input asp-for="RegDisplayName"
+                       class="room-input"
+                       placeholder="Display name"
+                       autocomplete="nickname"
+                       id="reg-displayname"
+                       maxlength="32"
+                       oninput="validateDisplayName(this)"
+                       required />
+                <div class="field-hint" id="reg-displayname-hint">Shown to everyone in chat</div>
+            </div>
+
+            <div class="field-group">
+                <div class="input-wrap">
+                    <input asp-for="RegPassword"
+                           type="password"
+                           class="room-input"
+                           placeholder="Password"
+                           autocomplete="new-password"
+                           id="reg-pw"
+                           oninput="updateStrength(this.value); validateRegConfirm()"
+                           required />
+                    <button type="button" class="toggle-pw" onclick="togglePw('reg-pw',this)" title="Show/hide">&#x1F441;</button>
+                </div>
+                <div class="pw-strength"><div class="pw-strength-bar" id="pw-bar"></div></div>
+                <div class="field-hint" id="pw-hint">Min 8 chars, at least 1 letter and 1 number</div>
+            </div>
+
+            <div class="field-group">
+                <div class="input-wrap">
+                    <input asp-for="RegConfirm"
+                           type="password"
+                           class="room-input"
+                           placeholder="Confirm password"
+                           autocomplete="new-password"
+                           id="reg-confirm"
+                           oninput="validateRegConfirm()"
+                           required />
+                    <button type="button" class="toggle-pw" onclick="togglePw('reg-confirm',this)" title="Show/hide">&#x1F441;</button>
+                </div>
+                <div class="field-hint" id="confirm-hint">&nbsp;</div>
+            </div>
+
+            <button type="submit" class="login-btn">Create Account</button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    function switchTab(name) {
+        document.getElementById('form-login')   .classList.toggle('active', name === 'login');
+        document.getElementById('form-register').classList.toggle('active', name === 'register');
+        document.getElementById('tab-login')    .classList.toggle('active', name === 'login');
+        document.getElementById('tab-register') .classList.toggle('active', name === 'register');
+    }
+
+    function togglePw(id, btn) {
+        var inp = document.getElementById(id);
+        if (!inp) return;
+        var showing = inp.type === 'text';
+        inp.type = showing ? 'password' : 'text';
+        btn.textContent = showing ? '\uD83D\uDC41' : '\uD83D\uDE48';
+    }
+
+    function updateStrength(val) {
+        var score = 0;
+        if (val.length >= 8)          score++;
+        if (/[A-Z]/.test(val))        score++;
+        if (/[0-9]/.test(val))        score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+        if (val.length >= 16)         score++;
+        var pct   = (score / 5) * 100;
+        var color = score <= 1 ? '#e84040' : score <= 2 ? '#f5a623' : score <= 3 ? '#f0d44a' : '#4dff89';
+        var bar = document.getElementById('pw-bar');
+        bar.style.width = pct + '%';
+        bar.style.background = color;
+        var hint = document.getElementById('pw-hint');
+        hint.textContent = score <= 1 ? 'Weak password'
+                         : score <= 2 ? 'Fair \u2013 try adding uppercase or symbols'
+                         : score <= 3 ? 'Good'
+                         : '\u2713 Strong password';
+        hint.style.color = color;
+    }
+
+    function validateDisplayName(el) {
+        var v    = el.value.trim();
+        var hint = document.getElementById('reg-displayname-hint');
+        if (v.length === 0)       { hint.textContent = '1–32 chars, any characters'; hint.style.color = ''; }
+        else if (v.length > 32)   { hint.textContent = 'Too long (max 32 chars)';        hint.style.color = '#e84040'; }
+        else                      { hint.textContent = '✓ Looks good';               hint.style.color = '#4dff89'; }
+    }
+
+    function validateRegUsername(el) {
+        var v = el.value.trim();
+        var hint = document.getElementById('reg-username-hint');
+        if (v.length === 0)               { hint.textContent = '3\u201332 chars, letters/numbers/_ -'; hint.style.color = ''; }
+        else if (v.length < 3)            { hint.textContent = 'Too short (min 3 chars)';               hint.style.color = '#e84040'; }
+        else if (v.length > 32)           { hint.textContent = 'Too long (max 32 chars)';               hint.style.color = '#e84040'; }
+        else if (!/^[A-Za-z0-9_\-]+$/.test(v)) { hint.textContent = 'Only letters, numbers, _ and - allowed'; hint.style.color = '#e84040'; }
+        else                              { hint.textContent = '\u2713 Looks good';                     hint.style.color = '#4dff89'; }
+    }
+
+    function validateRegConfirm() {
+        var pw   = document.getElementById('reg-pw').value;
+        var cfm  = document.getElementById('reg-confirm').value;
+        var hint = document.getElementById('confirm-hint');
+        if (cfm.length === 0) { hint.innerHTML = '&nbsp;'; hint.style.color = ''; return; }
+        if (pw === cfm) { hint.textContent = '\u2713 Passwords match';      hint.style.color = '#4dff89'; }
+        else            { hint.textContent = '\u2717 Passwords do not match'; hint.style.color = '#e84040'; }
+    }
+</script>
+</body>
+</html>

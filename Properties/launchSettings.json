@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "ChatClient.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5050"
+    }
+  }
+}

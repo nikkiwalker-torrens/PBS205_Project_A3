@@ -1,0 +1,315 @@
+﻿@page
+@model ChatClient.Web.Pages.ChatModel
+@{
+    ViewData["Title"] = "Chat – " + Model.CurrentRoom;
+}
+
+<div class="chat-shell">
+
+    @* ══════════════════════════════════════
+        LEFT SIDEBAR  (matches Rooms page)
+        ══════════════════════════════════════ *@
+    <aside class="left-sidebar">
+
+        @* Brand header *@
+        <div class="sidebar-brand">
+            <div class="brand-title">💬 Chat Client</div>
+            <div class="brand-subtitle">@Model.CurrentRoom</div>
+        </div>
+
+        @* User row + logout *@
+        <div class="sidebar-user-row">
+            <div class="sidebar-user-avatar">@(Model.DisplayName.Length > 0 ? Model.DisplayName.Substring(0,1).ToUpper() : "?")</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name">@Model.DisplayName</div>
+                <div class="sidebar-user-status">● Online</div>
+            </div>
+            <form method="post" asp-page-handler="Logout" style="margin:0">
+                <button type="submit" class="logout-btn" title="Sign out">⏏</button>
+            </form>
+        </div>
+
+        @* Rooms heading *@
+        <div class="sidebar-section" style="padding-bottom:6px">
+            <div class="sidebar-heading">Rooms</div>
+        </div>
+
+        @* Room list *@
+        <div class="room-list" id="roomList">
+            @foreach (var room in Model.Rooms)
+            {
+                var isActive  = string.Equals(room.Name, Model.CurrentRoom, StringComparison.OrdinalIgnoreCase);
+                var isLobby   = string.Equals(room.Name, "Lobby",          StringComparison.OrdinalIgnoreCase);
+                var isGeneral = string.Equals(room.Name, "General",        StringComparison.OrdinalIgnoreCase);
+
+                // Server-rendered unread count for this room (before SignalR updates)
+                Model.UnreadCounts.TryGetValue(room.Name, out var serverUnread);
+
+            <form method="post" asp-page-handler="JoinRoom" class="room-form">
+                <input type="hidden" name="roomName" value="@room.Name" />
+                <button type="submit" class="room-button @(isActive ? "active" : "")">
+                    <span class="room-left">
+                        <span class="room-hash">@(isLobby ? "🏠" : isGeneral ? "🏠" : "#")</span>
+                        <span class="room-name">@room.Name</span>
+                    </span>
+                    <span class="room-right">
+                        @if (room.IsPrivate)
+                        {
+                        <span class="room-tag">Private</span>
+                        }
+                        @* badge: hidden when active; pre-populated from server, then live-updated by SignalR *@
+                        <span class="unread-badge"
+                              id="badge-@room.Name"
+                              style="display:@(isActive || serverUnread == 0 ? "none" : "inline-block")">@(serverUnread > 99 ? "99+" : serverUnread > 0 ? serverUnread.ToString() : "")</span>
+                    </span>
+                </button>
+            </form>
+            }
+        </div>
+
+        @* Create room *@
+        <div class="create-room-section">
+            <form method="post" asp-page-handler="CreateRoom" class="create-room-form">
+                <input asp-for="NewRoomName"
+                       class="text-input"
+                       placeholder="New room name…"
+                       maxlength="50"
+                       pattern="[A-Za-z0-9 _\-]+"
+                       title="Letters, numbers, spaces, _ and - only" />
+                <label class="checkbox-row">
+                    <input asp-for="NewRoomIsPrivate" />
+                    <span>Private room</span>
+                </label>
+                <button type="submit" class="primary-button">Create Room</button>
+            </form>
+        </div>
+
+    </aside>
+
+    @* ══════════════════════════════════════
+        MAIN CHAT AREA
+        ══════════════════════════════════════ *@
+    <main class="chat-main">
+
+        <div class="chat-topbar">
+            <div>
+                <h2 class="chat-room-title">
+                    @(string.Equals(Model.CurrentRoom,"Lobby",StringComparison.OrdinalIgnoreCase) ||
+                      string.Equals(Model.CurrentRoom,"General",StringComparison.OrdinalIgnoreCase) ? "🏠 " : "# ")@Model.CurrentRoom
+                </h2>
+                <div class="chat-meta" id="chatMeta" style="visibility:hidden">
+                    <span id="onlineCount">@Model.OnlineUserCount online</span>
+                    &nbsp;·&nbsp;
+                    <span class="rabbit-status" id="rabbitStatus">
+                        RabbitMQ: @(Model.IsRabbitConnected ? "✓ Connected" : "✗ Disconnected")
+                    </span>
+                </div>
+            </div>
+
+            <div class="chat-actions">
+                <div class="chat-menu">
+                    <button type="button" class="menu-dots" id="menuBtn" title="Options">⋯</button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <form method="post" asp-page-handler="ExportChat">
+                            <button type="submit">⬇ Export chat</button>
+                        </form>
+                        @if (!string.Equals(Model.CurrentRoom, "General", StringComparison.OrdinalIgnoreCase) &&
+                             !string.Equals(Model.CurrentRoom, "Lobby",   StringComparison.OrdinalIgnoreCase))
+                        {
+                        <form method="post" asp-page-handler="LeaveRoom">
+                            <button type="submit">🚪 Leave room</button>
+                        </form>
+                        }
+                        <div style="height:1px;background:#363b46;margin:4px 0"></div>
+                        <form method="post" asp-page-handler="Logout">
+                            <button type="submit" style="color:#ff7474">⏏ Sign out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+        {
+        <div class="status-banner">@Model.StatusMessage</div>
+        }
+
+        @* Messages *@
+        <div class="chat-message-panel" id="chatMessagePanel" style="visibility:hidden">
+            @if (Model.Messages.Count == 0)
+            {
+            <div class="empty-chat-state">No messages yet — be the first to say something! 👋</div>
+            }
+            else
+            {
+                foreach (var message in Model.Messages)
+                {
+            @* Status events: IsStatus flag (new) OR empty Username (legacy fallback) *@
+                    var isStatusMsg = message.IsStatus || string.IsNullOrWhiteSpace(message.Username);
+                    if (isStatusMsg)
+                    {
+                        var statusLabel = !string.IsNullOrWhiteSpace(message.StatusText)
+                            ? message.StatusText
+                            : message.Text;
+            <div class="status-event">@statusLabel</div>
+                    }
+                    else
+                    {
+                        var isMine  = string.Equals(message.Username, Model.Username, StringComparison.OrdinalIgnoreCase);
+                        var initial = message.Username.Substring(0, 1).ToUpper();
+            <div class="message-row @(isMine ? "mine" : "theirs")">
+                <div class="message-avatar">@initial</div>
+                <div class="message-block">
+                    <div class="message-meta">
+                        <span class="message-user">@message.Username</span>
+                        <span class="message-time">@message.Timestamp.ToString("HH:mm")</span>
+                        <button type="button" class="reply-btn" data-sender="@message.Username" data-text="@Html.Raw(System.Text.Json.JsonSerializer.Serialize(message.Text))" title="Reply">↩</button>
+                    </div>
+                    <div class="message-bubble @(isMine ? "mine" : "other")">@message.Text</div>
+                </div>
+            </div>
+                    }
+                }
+            }
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator" style="display:none">
+            <div class="typing-dots"><span></span><span></span><span></span></div>
+            <span id="typingLabel"></span>
+        </div>
+
+        <div id="replyPreview" class="reply-preview" style="display:none">
+            <div class="reply-preview-inner">
+                <span class="reply-preview-label">Replying to <strong id="replyPreviewUser"></strong></span>
+                <span class="reply-preview-text" id="replyPreviewText"></span>
+            </div>
+            <button type="button" id="cancelReplyBtn" class="reply-cancel" title="Cancel reply">✕</button>
+        </div>
+
+        <div class="chat-input-bar">
+            <div class="send-message-form">
+                <input id="messageTextInput"
+                       class="message-input"
+                       placeholder="Message #@Model.CurrentRoom…"
+                       autocomplete="off"
+                       type="text"
+                       maxlength="2000" />
+                <button type="button" id="sendMessageBtn" class="primary-button">Send</button>
+            </div>
+        </div>
+
+        <div class="chat-footer-meta">
+            <span>IP: @Model.IpAddress</span>
+            <span>Port: @Model.Port</span>
+            <span style="margin-left:auto;color:#7a8394">@Model.CurrentRoom</span>
+        </div>
+
+    </main>
+
+    @* ══════════════════════════════════════
+        RIGHT SIDEBAR  (Members)
+        ══════════════════════════════════════ *@
+    <aside class="right-sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <h3>Members <span id="memberCountBadge" style="font-size:12px;font-weight:400;color:#8a93a8"></span></h3>
+            </div>
+
+            <div class="member-list" id="memberList" style="visibility:hidden">
+                @if (Model.Members.Count == 0)
+                {
+                <div class="empty-members-state">No members to display.</div>
+                }
+                else
+                {
+                    foreach (var member in Model.Members)
+                    {
+                        var isOnline    = !member.EndsWith(" (offline)", StringComparison.OrdinalIgnoreCase);
+                        var displayName = isOnline ? member : member[..^" (offline)".Length];
+                        var initial     = string.IsNullOrWhiteSpace(displayName) ? "?" : displayName.Substring(0, 1).ToUpper();
+                <div class="member-card @(isOnline ? "" : "member-offline")">
+                    <div class="member-left">
+                        <div class="member-avatar">@initial</div>
+                        <div class="member-name">@displayName</div>
+                    </div>
+                    <div class="member-right">
+                        <div class="member-status @(isOnline ? "member-status-online" : "member-status-offline")">
+                            @(isOnline ? "Online" : "Offline")
+                        </div>
+                        @if (isOnline && !string.Equals(displayName, Model.Username, StringComparison.OrdinalIgnoreCase))
+                        {
+                        <button type="button" class="dm-btn" data-target="@displayName" title="Message @displayName">💬</button>
+                        }
+                    </div>
+                </div>
+                    }
+                }
+            </div>
+
+            @if (Model.IsCurrentRoomPrivate)
+            {
+            <div class="invite-section">
+                <h4>Add User</h4>
+                <form method="post" asp-page-handler="InviteUser" class="invite-form">
+                    <select asp-for="InviteUsername" class="text-input">
+                        <option value="">Select user…</option>
+                        @foreach (var user in Model.InvitableUsers)
+                        {
+                        <option value="@user">@user</option>
+                        }
+                    </select>
+                    <button type="submit" class="primary-button">Add</button>
+                </form>
+            </div>
+            }
+        </div>
+    </aside>
+
+</div>
+
+@section Scripts {
+    <script>
+        window.chatConfig = {
+            username:    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Username)),
+            displayName: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DisplayName)),
+            room:        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CurrentRoom))
+        };
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script src="~/js/chat-heartbeat.js" asp-append-version="true"></script>
+
+    <script>// ── Scroll to bottom on first load ──
+        (function () {
+            var panel = document.getElementById("chatMessagePanel");
+            if (panel) panel.scrollTop = panel.scrollHeight;
+        })();
+
+        // ── 3-dot menu toggle ──
+        (function () {
+            var btn  = document.getElementById("menuBtn");
+            var menu = document.getElementById("menuDropdown");
+            if (!btn || !menu) return;
+            btn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                menu.classList.toggle("show");
+            });
+            document.addEventListener("click", function (e) {
+                if (!menu.contains(e.target) && e.target !== btn)
+                    menu.classList.remove("show");
+            });
+        })();
+
+        // ── Prevent sending empty messages ──
+        (function () {
+            var input   = document.getElementById("messageTextInput");
+            var sendBtn = document.getElementById("sendMessageBtn");
+            if (!input || !sendBtn) return;
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (input.value.trim().length > 0) sendBtn.click();
+                }
+            });
+        })();</script>
+}

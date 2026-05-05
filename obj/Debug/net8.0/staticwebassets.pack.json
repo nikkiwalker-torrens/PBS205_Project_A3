@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\js\\chat-heartbeat.js",
+      "PackagePath": "staticwebassets\\js\\chat-heartbeat.js"
+    },
+    {
+      "Id": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\js\\rooms-presence.js",
+      "PackagePath": "staticwebassets\\js\\rooms-presence.js"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ChatClient.Web.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.ChatClient.Web.props",
+      "PackagePath": "build\\ChatClient.Web.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.ChatClient.Web.props",
+      "PackagePath": "buildMultiTargeting\\ChatClient.Web.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.ChatClient.Web.props",
+      "PackagePath": "buildTransitive\\ChatClient.Web.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

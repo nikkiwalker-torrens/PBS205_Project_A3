@@ -1,0 +1,218 @@
+@page
+@model ChatClient.Web.Pages.RoomsModel
+@{
+    ViewData["Title"] = "Lobby";
+}
+
+@* Use the same chat-shell grid as Chat.cshtml for visual consistency *@
+<div class="chat-shell">
+
+    @* LEFT SIDEBAR *@
+    <aside class="left-sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-title">💬 Chat Client</div>
+            <div class="brand-subtitle">Lobby</div>
+        </div>
+
+        <div class="sidebar-user-row">
+            <div class="sidebar-user-avatar">@(Model.DisplayName.Length > 0 ? Model.DisplayName.Substring(0,1).ToUpper() : "?")</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name">@Model.DisplayName</div>
+                <div class="sidebar-user-status">● Online</div>
+            </div>
+            <form method="post" asp-page-handler="Logout" style="margin:0">
+                <button type="submit" class="logout-btn" title="Sign out">⏏</button>
+            </form>
+        </div>
+        @if (Model.IsAdmin)
+        {
+        <div style="padding:8px 12px">
+            <a href="/Admin" class="admin-panel-btn">🛡️ Admin Panel</a>
+        </div>
+        }
+
+        <div class="sidebar-section" style="padding-bottom:4px">
+            <div class="sidebar-heading">Rooms</div>
+        </div>
+
+        <div class="room-list" id="roomList">
+            @if (Model.Rooms != null && Model.Rooms.Count > 0)
+            {
+                foreach (var room in Model.Rooms)
+                {
+                    var isLobby   = string.Equals(room.Name, "Lobby",   StringComparison.OrdinalIgnoreCase);
+                    var isGeneral = string.Equals(room.Name, "General", StringComparison.OrdinalIgnoreCase);
+                    var isSystem  = isLobby || isGeneral;
+                    Model.UnreadCounts.TryGetValue(room.Name, out var unread);
+
+            <div class="room-row">
+                <form method="post" asp-page-handler="JoinRoom" class="room-form" style="flex:1;margin:0">
+                    <input type="hidden" name="roomName" value="@room.Name" />
+                    <button type="submit" class="room-button">
+                        <span class="room-left">
+                            <span class="room-hash">@(isSystem ? "🏠" : "#")</span>
+                            <span class="room-name">@room.Name</span>
+                        </span>
+                        <span class="room-right">
+                            @if (room.IsPrivate)
+                            {
+                            <span class="room-tag">Private</span>
+                            }
+                            @if (unread > 0)
+                            {
+                            <span class="unread-badge" id="badge-@room.Name">@(unread > 99 ? "99+" : unread.ToString())</span>
+                            }
+                            else
+                            {
+                            <span class="unread-badge" id="badge-@room.Name" style="display:none"></span>
+                            }
+                        </span>
+                    </button>
+                </form>
+
+            </div>
+                }
+            }
+            else
+            {
+            <div class="empty-text">No rooms available.</div>
+            }
+        </div>
+
+        <div class="create-room-section">
+            <form method="post" asp-page-handler="CreateRoom" class="create-room-form">
+                <input asp-for="NewRoomName"
+                       class="text-input"
+                       placeholder="New room name..."
+                       maxlength="50" />
+                <label class="checkbox-row">
+                    <input asp-for="NewRoomIsPrivate" />
+                    <span>Private room</span>
+                </label>
+                <button type="submit" class="primary-button">Create Room</button>
+            </form>
+        </div>
+
+    </aside>
+
+    @* MAIN AREA *@
+    <main class="chat-main" style="justify-content:center;align-items:center;display:flex">
+        <div class="rooms-main-card">
+            <div class="rooms-main-title">Welcome back, @Model.DisplayName! 👋</div>
+            <div class="rooms-main-text">
+                Select a room from the sidebar to start chatting, or create a new one.
+            </div>
+
+            @if (Model.Rooms != null && Model.Rooms.Count > 0)
+            {
+            <div class="rooms-main-preview">
+                @foreach (var room in Model.Rooms.Take(6))
+                {
+                    var isLobby   = string.Equals(room.Name, "Lobby",   StringComparison.OrdinalIgnoreCase);
+                    var isGeneral = string.Equals(room.Name, "General", StringComparison.OrdinalIgnoreCase);
+                <form method="post" asp-page-handler="JoinRoom" class="room-form" style="margin:0">
+                    <input type="hidden" name="roomName" value="@room.Name" />
+                    <button type="submit" class="preview-line">
+                        <span style="color:#6e79ff;font-weight:700;margin-right:8px">@(isLobby || isGeneral ? "🏠" : "#")</span>
+                        @room.Name
+                        @if (room.IsPrivate) { <span class="room-tag" style="margin-left:8px">Private</span> }
+                        @if (Model.UnreadCounts.TryGetValue(room.Name, out var unreadP) && unreadP > 0)
+                        {
+                        <span class="unread-badge" style="margin-left:auto">@(unreadP > 99 ? "99+" : unreadP.ToString())</span>
+                        }
+                    </button>
+                </form>
+                }
+            </div>
+            }
+            else
+            {
+            <div class="preview-line" style="color:#8a93a8;cursor:default">
+                No rooms yet — create one in the sidebar to get started!
+            </div>
+            }
+        </div>
+    </main>
+
+    @* RIGHT SIDEBAR — Info panel *@
+    <aside class="right-sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <h3>Info</h3>
+            </div>
+            <div style="padding:16px;font-size:13px;color:#8a93a8;display:flex;flex-direction:column;gap:8px">
+                <div>RabbitMQ</div>
+                <div style="color:#e4e9f4;font-weight:600">@Model.RabbitMqHostPort</div>
+                <div style="margin-top:8px">Users online</div>
+                <div style="color:#4dff89;font-weight:700;font-size:18px" id="onlineCountDisplay">@Model.UsersOnline</div>
+            </div>
+        </div>
+    </aside>
+
+</div>
+
+@section Scripts {
+    <script>
+        window.roomsConfig = {
+            username: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Username))
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script src="~/js/rooms-presence.js" asp-append-version="true"></script>
+}
+
+<style>
+    /* Room row: join button + optional delete button side by side */
+    .room-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .room-row .room-form { margin: 0; }
+
+    /* Delete room button */
+    .delete-room-btn {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: transparent;
+        color: #8a93a8;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: background .15s, color .15s, border-color .15s;
+        line-height: 1;
+    }
+    .delete-room-btn:hover {
+        background: rgba(232, 64, 64, 0.15);
+        border-color: #e84040;
+        color: #ff7474;
+    }
+
+    /* Admin panel link button */
+    .admin-panel-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: rgba(174, 97, 210, 0.12);
+        border: 1px solid rgba(174, 97, 210, 0.3);
+        color: #ae61d2;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+    }
+    .admin-panel-btn:hover {
+        background: rgba(174, 97, 210, 0.22);
+        border-color: #ae61d2;
+    }
+</style>

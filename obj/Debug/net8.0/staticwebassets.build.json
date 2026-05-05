@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "epKhZ/lrgbmYyuVj37S3421KvZfpumwwZK/lMhEmik4=",
+  "Source": "ChatClient.Web",
+  "BasePath": "_content/ChatClient.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ChatClient.Web\\wwwroot",
+      "Source": "ChatClient.Web",
+      "ContentRoot": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\",
+      "BasePath": "_content/ChatClient.Web",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\css\\site.css",
+      "SourceId": "ChatClient.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\",
+      "BasePath": "_content/ChatClient.Web",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\js\\chat-heartbeat.js",
+      "SourceId": "ChatClient.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\",
+      "BasePath": "_content/ChatClient.Web",
+      "RelativePath": "js/chat-heartbeat.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\chat-heartbeat.js"
+    },
+    {
+      "Identity": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\js\\rooms-presence.js",
+      "SourceId": "ChatClient.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Stephen\\Documents\\Uni Stuff\\PBT205\\Assessment 3\\ChatApp v1\\Chat_Final\\wwwroot\\",
+      "BasePath": "_content/ChatClient.Web",
+      "RelativePath": "js/rooms-presence.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\rooms-presence.js"
+    }
+  ]
+}

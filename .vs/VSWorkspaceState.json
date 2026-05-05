@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Data",
+    "\\Hubs",
+    "\\Models",
+    "\\Pages",
+    "\\Pages\\Shared",
+    "\\Properties",
+    "\\Services",
+    "\\wwwroot",
+    "\\wwwroot\\css",
+    "\\wwwroot\\js"
+  ],
+  "SelectedNode": "\\wwwroot\\css\\site.css",
+  "PreviewInSolutionExplorer": false
+}
